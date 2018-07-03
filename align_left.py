@@ -17,12 +17,19 @@ def align_left(df, row_heading=False, columns=None):
     styles = [
         dict(selector='th.col_heading', **left_text),
         dict(selector='th.index_name', **left_text), ]
+
+    if not columns:
+        columns = []
+
     if row_heading:
         styles.append(dict(selector='th.row_heading', **left_text))
     else:
         styles.append(dict(selector='th.row_heading', **right_text))
-    if not columns:
-        columns = []
 
-    return df.style.set_table_styles(styles).applymap(
-        lambda s: 'text-align: left', subset=columns)
+    for n, column in enumerate(df.columns):
+        if column in columns:
+            styles.append(dict(selector='td.col{}'.format(n), **left_text))
+        else:
+            styles.append(dict(selector='td.col{}'.format(n), **right_text))
+
+    return df.style.set_table_styles(styles)
