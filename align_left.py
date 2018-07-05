@@ -1,4 +1,7 @@
-def align_left(df, row_heading=False, columns=None):
+'''This module provides a set of functions to render HTML tables.'''
+
+
+def align_left(df, row_heading=False, hide_row_heading=False, columns=None):
     '''This function aligns the column headers to the left as well
     as provided columns.
 
@@ -23,7 +26,12 @@ def align_left(df, row_heading=False, columns=None):
     if row_heading:
         styles.append(dict(selector='th.row_heading', **left_text))
     else:
-        styles.append(dict(selector='th.row_heading', **right_text))
+        if hide_row_heading:
+            styles.extend([
+                dict(selector='th.row_heading', props=[('display', 'none')]),
+                dict(selector='th.index_name', props=[('display', 'none')])])
+        else:
+            styles.append(dict(selector='th.row_heading', **right_text))
 
     for n, column in enumerate(df.columns):
         if column in columns:
