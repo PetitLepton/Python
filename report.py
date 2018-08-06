@@ -116,12 +116,10 @@ class Report:
             if 'id' not in tag.attrs.keys():
                 tag.attrs = None
 
-        # This is a hack to keep the right syntax for code. At the
-        # end of the function, the line breaks are removed. This should
-        # not be done for the <pre> tag. Besides, for highlight.js to
-        # work, one needs the tag <pre><code></code></pre>
+        # For highlight.js to work, one needs
+        # the tag <pre><code></code></pre>
         for tag in light_html.findAll('pre'):
-            content = ''.join(map(str, tag.contents)).replace('\n', '\_n')
+            content = ''.join(map(str, tag.content))
             content = '<code>{}</code>'.format(content)
             tag.contents = BeautifulSoup(content, 'lxml')
 
@@ -129,4 +127,4 @@ class Report:
         # on the different servers
         codecs.open(
             str(self.report_path),
-            'w', encoding='utf-8').write(str(light_html).replace('\n', '').replace('\_n', '\n'))
+            'w', encoding='utf-8').write(str(light_html))
