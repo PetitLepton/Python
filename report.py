@@ -116,15 +116,9 @@ class Report:
             if 'id' not in tag.attrs.keys():
                 tag.attrs = None
 
-        # For highlight.js to work, one needs
-        # the tag <pre><code></code></pre>
-        for tag in light_html.findAll('pre'):
-            content = ''.join(map(str, tag.content))
-            content = '<code>{}</code>'.format(content)
-            tag.contents = BeautifulSoup(content, 'lxml')
-
+        light_html = '\n'.join([s for s in str(light_html).split('\n') if s])
         # codecs is mandatory to avoid problem of encoding
         # on the different servers
         codecs.open(
             str(self.report_path),
-            'w', encoding='utf-8').write(str(light_html))
+            'w', encoding='utf-8').write(light_html)
